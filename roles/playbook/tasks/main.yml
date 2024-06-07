@@ -11,4 +11,10 @@
     state: latest
   when: ansible_distribution == "Ubuntu"
         
-             
+- name: "Check wheather app and database are running."
+  script: appcheck.sh  
+  args:
+    executable: /bin/bash
+  ignore_errors: true
+  register: app_process_check
+- debug: var=app_process_check.stdout             
