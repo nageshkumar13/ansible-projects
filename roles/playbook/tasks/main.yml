@@ -42,13 +42,6 @@
     - ansible_distribution == "Amazon"
   register: patch_update
 
-- name: "Check if reboot required"
-  shell: KERNEL_NEW=$(rpm -q --last kernel |head -1 | awk '{print $1}'|sed 's/kernel-//'); KERNEL_NOW=$(uname -r); if [[ $KERNEL_NEW != $KERNEL_NOW ]]; then echo "reboot needed"; else echo "reboot not needed"; fi
-  ignore_errors: true
-  register: reboot_status
-  when: ansible_distribution == "Amazon"
-- debug: var=reboot_status.stdout
-
 - name: Check if reboot required
   shell: |
     KERNEL_NEW=$(dpkg -l | grep linux-image | awk '{print $3}' | sort -V | tail -1)
@@ -60,7 +53,6 @@
     fi
   ignore_errors: true
   register: reboot_status
-  when: ansible_distribution == "Ubuntu"
 - debug: var=reboot_status.stdout
 
 
