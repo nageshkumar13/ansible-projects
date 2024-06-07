@@ -55,5 +55,11 @@
   register: reboot_status
 - debug: var=reboot_status.stdout
 
-
+- name: Restart the system if reboot is needed
+  command: shutdown -r +1 "Rebooting System After Patching"
+  async: 0
+  poll: 0
+  when: reboot_status.stdout.strip() == "reboot needed"
+  register: reboot_started
+  ignore_errors: true
 
