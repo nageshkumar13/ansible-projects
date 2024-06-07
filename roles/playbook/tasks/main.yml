@@ -34,7 +34,7 @@
   register: patch_update
 
 - name: Apply patches to the server
-  apt: 
+  yum: 
     name: kernel 
     state: latest
   when: 
