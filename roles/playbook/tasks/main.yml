@@ -23,3 +23,27 @@
   fail:
     msg: "{{ ansible_hostname }} has a running application. Please stop the application and then proceed with the patch."
   when: app_process_check.stdout.strip() == "Process is running."
+
+- name: Apply patches to the server
+  apt: 
+    name: linux-generic 
+    state: latest
+  when: 
+    - app_process_check.stdout.strip() == "Process is not running."
+    - ansible_distribution == "Ubuntu"
+  register: patch_update
+
+- name: Apply patches to the server
+  apt: 
+    name: kernel 
+    state: latest
+  when: 
+    - app_process_check.stdout.strip() == "Process is not running."
+    - ansible_distribution == "Amazon"
+  register: patch_update
+
+
+
+
+
+
