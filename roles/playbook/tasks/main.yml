@@ -18,3 +18,8 @@
   ignore_errors: true
   register: app_process_check
 - debug: var=app_process_check.stdout             
+
+- name: Check and start patching on Linux servers
+  fail:
+    msg: "{{ ansible_hostname }} has a running application. Please stop the application and then proceed with the patch."
+  when: app_process_check.stdout.strip() == "Process is running."
