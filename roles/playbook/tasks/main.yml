@@ -63,3 +63,23 @@
   register: reboot_started
   ignore_errors: true
 
+- name: Wait for 1 minute for the system to come up
+  pause: minutes=1 
+
+- name: Check the system status
+  local_action: 
+    module: shell 
+    args: 
+      cmd: ansible -u ansible -m ping {{ ansible_hostname }}
+  register: result
+  until: result.rc == 0
+  retries: 30
+  delay: 10
+
+- name: Check the client uptime
+  shell: uptime
+  register: machine_uptime
+
+- debug: var=machine_uptime.stdout
+
+
